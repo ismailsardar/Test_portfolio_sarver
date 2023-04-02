@@ -33,8 +33,8 @@ const limiter = rateLimit({
 	legacyHeaders: false,
 });
 app.use(limiter);
-//rout middleware
-readdirSync('./routes').map(fill => app.use('/api/v1', require(`./routes/${fill}`)));
+//route middleware
+readdirSync('./routes').map(file => app.use('/api/v1', require(`./routes/${file}`)));
 //undefine router
 app.use('*',(req,res) => {
     res.status(404).send('This is Rona Router');
