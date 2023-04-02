@@ -24,7 +24,7 @@ const projectsSchema = new mongoose.Schema(
       required: true,
     },
     technologies: {
-      type: Array,
+      type: [],
       required: true,
     },
   },
