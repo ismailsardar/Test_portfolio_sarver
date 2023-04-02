@@ -4,13 +4,14 @@
   "description": "This is testing portfolio projects",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index"
+    "start": "node index",
+    "dev": "nodemon index"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ismailsardar/Test_portfolio_sarver.git"
   },
-  "keywords": [],
+  "keywords": ["portfolio"],
   "author": "",
   "license": "ISC",
   "bugs": {
