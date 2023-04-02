@@ -1,3 +1,8 @@
+/**
+ * Date: 2/04/2023
+ * Subject: Portfolio All Models
+ * Auth: Ismile Sardar
+ */
 const mongoose = require("mongoose");
 
 const coursesSchema = new mongoose.Schema(
