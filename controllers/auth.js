@@ -5,7 +5,7 @@
  */
 
 const jwt = require("jsonwebtoken");
-const { hashPassword } = require("../helper/auth.js");
+const { hashPassword, comparePassword } = require("../helper/auth.js");
 const User = require("../models/userModel");
 
 exports.register = async (req, res) => {
@@ -37,10 +37,7 @@ exports.register = async (req, res) => {
       email,
       password: passwordHash,
     }).save();
-    // 6. create signed jwt
-    // const token = jwt.sign({ _id: newUser._id }, process.env.JWT_KEY, {
-    //   expiresIn: "7d",
-    // });
+
     // 7. send response
     res.status(201).json({
       user: {
@@ -48,9 +45,46 @@ exports.register = async (req, res) => {
         email: newUser.email,
         role: newUser.role,
       },
-    //   token: token,
     });
   } catch (error) {
     console.log(error);
+  }
+};
+
+exports.login = async (req, res) => {
+  try {
+    let password = req.body.password;
+    let email = req.body.email;
+    // 3. check if email is taken
+    const existingUser = await User.findOne({ email });
+    //  console.log(existingUser);
+    if (!existingUser) {
+      return res.status(404).json({ error: "user not found!" });
+    }
+    const match = await comparePassword(password, existingUser["password"]);
+    if (!match) {
+      return res.status(404).json({ error: "Rona password!" });
+    }
+    existingUser["password"] = "";
+
+    // 6. create signed jwt
+    const token = jwt.sign({ _id: existingUser._id }, process.env.JWT_KEY, {
+      expiresIn: "7d",
+    });
+    if (match) {
+      res.status(200).json({
+        success: true,
+        message: "Login successfully",
+        data: existingUser,
+        token: token,
+      });
+    } else {
+      res.status(400).json({
+        success: false,
+        message: "Invalid email or password",
+      });
+    }
+  } catch (error) {
+    res.status(500).send(error.message);
   }
 };
